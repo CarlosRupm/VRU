@@ -40,9 +40,20 @@ body {
 
 .hero-top {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(130px, 180px) 1fr;
   gap: 1.2rem;
   align-items: center;
+}
+
+.escudo {
+  width: 50%;
+  max-width: 50px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
 }
 
 .kicker {
@@ -66,19 +77,25 @@ body {
 
 .tabs,
 .subtabs,
-.microtabs,
-.playertabs {
+.microtabs {
   display: flex;
   gap: 0.75rem;
   margin-bottom: 1rem;
   flex-wrap: wrap;
+}
+
+.tabs {
+  justify-content: flex-start;
+}
+
+.subtabs,
+.microtabs {
   justify-content: flex-start;
 }
 
 .tab,
 .subtab,
-.microtab,
-.playertab {
+.microtab {
   border: 1px solid #3b3b45;
   background: #121218;
   color: var(--text);
@@ -94,17 +111,14 @@ body {
 .subtab:hover,
 .subtab:focus-visible,
 .microtab:hover,
-.microtab:focus-visible,
-.playertab:hover,
-.playertab:focus-visible {
+.microtab:focus-visible {
   border-color: var(--accent);
   outline: none;
 }
 
 .tab.active,
 .subtab.active,
-.microtab.active,
-.playertab.active {
+.microtab.active {
   background: var(--accent);
   border-color: var(--accent-dark);
 }
@@ -179,8 +193,7 @@ body {
 }
 
 .journey-list,
-.stats-list,
-.player-stats {
+.stats-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -189,8 +202,7 @@ body {
 }
 
 .journey-list li,
-.stats-list li,
-.player-stats li {
+.stats-list li {
   display: flex;
   justify-content: space-between;
   gap: 0.8rem;
@@ -201,156 +213,42 @@ body {
 }
 
 .journey-list span,
-.stats-list span,
-.player-stats span {
+.stats-list span {
   color: var(--muted);
   white-space: nowrap;
 }
 
 .journey-list strong,
-.stats-list strong,
-.player-stats strong {
+.stats-list strong {
   text-align: right;
   font-weight: 600;
 }
 
-.player-grid {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.player-card {
-  background: #191920;
-  border: 1px solid #353540;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.player-card summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 0.75rem 0.9rem;
-  font-weight: 700;
-}
-
-.player-card summary::-webkit-details-marker {
-  display: none;
-}
-
-.player-card .player-stats {
-  border-top: 1px solid #30303a;
-  padding: 0.75rem;
-}
-
-.team-card[open],
-.player-card[open] {
+.team-card[open] {
   border-color: #4a4a59;
 }
 
 @media (max-width: 720px) {
   .hero-top {
+    grid-template-columns: 1fr;
     text-align: center;
   }
 
   .tabs,
   .subtabs,
-  .microtabs,
-  .playertabs {
+  .microtabs {
     justify-content: center;
   }
 
   .team-card summary,
   .journey-list li,
-  .stats-list li,
-  .player-stats li {
+  .stats-list li {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .journey-list strong,
-  .stats-list strong,
-  .player-stats strong {
+  .stats-list strong {
     text-align: left;
-  }
-}
-
-.match-analytics {
-  margin-top: 1rem;
-}
-
-.match-analytics h3 {
-  margin: 0;
-  font-size: 1rem;
-}
-
-.analytics-hint {
-  margin: 0.3rem 0 0.8rem;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-.analytics-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.7rem;
-}
-
-.analytics-card {
-  border: 1px solid #33333e;
-  background: #16161c;
-  border-radius: 10px;
-  padding: 0.7rem;
-}
-
-.analytics-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 0.45rem;
-}
-
-.analytics-top strong {
-  font-size: 0.95rem;
-}
-
-.analytics-top span {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.line-chart {
-  height: 90px;
-  border: 1px solid #30303a;
-  border-radius: 8px;
-  background: linear-gradient(180deg, #14141a 0%, #101015 100%);
-  padding: 0.35rem;
-  margin-bottom: 0.45rem;
-}
-
-.line-chart svg {
-  width: 100%;
-  height: 100%;
-}
-
-.line-path {
-  fill: none;
-  stroke: #ff4a67;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.journey-labels {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.35rem;
-  color: var(--muted);
-  font-size: 0.7rem;
-  text-align: center;
-}
-
-@media (max-width: 720px) {
-  .analytics-grid {
-    grid-template-columns: 1fr;
   }
 }
