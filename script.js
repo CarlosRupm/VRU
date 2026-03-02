@@ -74,10 +74,14 @@ function renderAnalytics() {
       .map(([name, values]) => {
         const max = Math.max(...values);
         const avg = values.reduce((a, b) => a + b, 0) / values.length;
-        const bars = values
-          .map((value) => `<div class="bar" title="${value}" style="height:${Math.max((value / max) * 100, 8)}%"></div>`)
-          .join('');
         const labels = values.map((_, i) => `<span>J${i + 1}</span>`).join('');
+        const points = values
+          .map((value, i) => {
+            const x = (i / (values.length - 1)) * 100;
+            const y = 100 - (value / max) * 100;
+            return `${x},${y}`;
+          })
+          .join(' ');
 
         return `
           <article class="analytics-card">
@@ -85,7 +89,11 @@ function renderAnalytics() {
               <strong>${name}</strong>
               <span>Media: ${avg.toFixed(1)}</span>
             </div>
-            <div class="bars">${bars}</div>
+            <div class="line-chart">
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Gráfico de línea ${name}">
+                <polyline class="line-path" points="${points}"></polyline>
+              </svg>
+            </div>
             <div class="journey-labels">${labels}</div>
           </article>
         `;
