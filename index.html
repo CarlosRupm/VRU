@@ -78,6 +78,9 @@
           <label class="csv-button" for="csv-input">Seleccionar CSV</label>
           <input id="csv-input" type="file" accept=".csv,text/csv" multiple />
           <p class="csv-status" id="csv-status">Sin archivos cargados.</p>
+          <textarea id="csv-urls" class="csv-urls" rows="4" placeholder="Pega aquí URLs RAW de GitHub, una por línea
+Ejemplo: https://raw.githubusercontent.com/usuario/repo/main/datos/partido1.csv"></textarea>
+          <button id="load-github-csv" class="csv-button" type="button">Cargar CSV desde GitHub</button>
           <p class="csv-format">
             Columnas esperadas: <code>equipo,jugador,posicion,puntos,ensayos,placajes</code>
           </p>

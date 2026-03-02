@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha jugador | Vallecas Rugby Union</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header class="hero">
+        <p class="kicker">Ficha individual</p>
+        <h1 id="player-name">Jugador</h1>
+        <p class="subtitle" id="player-team">Equipo</p>
+      </header>
+
+      <section class="panel">
+        <div class="player-page-head">
+          <img id="player-photo" class="player-page-photo" alt="Foto del jugador" />
+          <ul class="stats-list" id="player-summary"></ul>
+        </div>
+
+        <h3>Evolución por partido</h3>
+        <ul class="player-stats" id="player-history"></ul>
+        <p><a class="player-link" href="index.html">← Volver al panel</a></p>
+      </section>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const team = params.get('team');
+      const playerName = params.get('player');
+      const stateRaw = localStorage.getItem('vruCsvState');
+      const state = stateRaw ? JSON.parse(stateRaw) : null;
+
+      const nameEl = document.getElementById('player-name');
+      const teamEl = document.getElementById('player-team');
+      const photoEl = document.getElementById('player-photo');
+      const summaryEl = document.getElementById('player-summary');
+      const historyEl = document.getElementById('player-history');
+
+      if (!state || !team || !playerName || !state.teamData?.[team]?.[playerName]) {
+        nameEl.textContent = 'Jugador no encontrado';
+        teamEl.textContent = 'Primero carga CSV en la página principal y abre de nuevo la ficha.';
+      } else {
+        const p = state.teamData[team][playerName];
+        nameEl.textContent = playerName;
+        teamEl.textContent = `Equipo ${team}`;
+        photoEl.src = p.foto || `https://ui-avatars.com/api/?name=${encodeURIComponent(playerName)}&background=222&color=fff`;
+        summaryEl.innerHTML = `
+          <li><span>Posición</span><strong>${p.posicion}</strong></li>
+          <li><span>Partidos</span><strong>${p.matches}</strong></li>
+          <li><span>Puntos</span><strong>${p.puntos}</strong></li>
+          <li><span>Ensayos</span><strong>${p.ensayos}</strong></li>
+          <li><span>Placajes</span><strong>${p.placajes}</strong></li>
+        `;
+        historyEl.innerHTML = p.history
+          .map((m) => `<li><span>${m.matchName}</span><strong>${m.puntos} pts · ${m.ensayos} ens · ${m.placajes} pla</strong></li>`)
+          .join('');
+      }
+    </script>
+  </body>
+</html>
