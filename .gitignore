@@ -1,0 +1,7 @@
+# Binary assets excluded from this repository
+assets/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
