@@ -474,3 +474,9 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.avg-line {
+  stroke: #8d8da0;
+  stroke-width: 1.2;
+  stroke-dasharray: 3 2;
+}

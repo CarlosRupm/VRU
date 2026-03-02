@@ -5,8 +5,7 @@ function setupTabGroup(group) {
   const activateTab = (selectedTab) => {
     tabs.forEach((tab) => {
       const isActive = tab === selectedTab;
-      const panelId = tab.getAttribute('aria-controls');
-      const panel = document.getElementById(panelId);
+      const panel = document.getElementById(tab.getAttribute('aria-controls'));
       tab.classList.toggle('active', isActive);
       tab.setAttribute('aria-selected', String(isActive));
       tab.tabIndex = isActive ? 0 : -1;
@@ -37,15 +36,17 @@ function setupTabGroup(group) {
   });
 }
 
+const METRICS = ['placajes', 'placajes_fallados', 'metros', 'tiempo_juego', 'ensayos', 'patadas'];
+
 const state = { matches: [], teamData: { rojo: {}, negro: {} } };
 
 const seedRows = [
-  { equipo: 'rojo', jugador: 'Álvaro Ruiz', posicion: 'Ala', puntos: 12, ensayos: 2, placajes: 6, foto_url: 'https://ui-avatars.com/api/?name=Alvaro+Ruiz&background=cf102d&color=fff' },
-  { equipo: 'rojo', jugador: 'Sergio Díaz', posicion: 'Centro', puntos: 8, ensayos: 1, placajes: 4, foto_url: 'https://ui-avatars.com/api/?name=Sergio+Diaz&background=cf102d&color=fff' },
-  { equipo: 'rojo', jugador: 'Pablo León', posicion: 'Tercera línea', puntos: 4, ensayos: 0, placajes: 10, foto_url: 'https://ui-avatars.com/api/?name=Pablo+Leon&background=cf102d&color=fff' },
-  { equipo: 'negro', jugador: 'Mario Nieto', posicion: 'Apertura', puntos: 10, ensayos: 1, placajes: 5, foto_url: 'https://ui-avatars.com/api/?name=Mario+Nieto&background=101015&color=fff' },
-  { equipo: 'negro', jugador: 'Hugo Pérez', posicion: 'Centro', puntos: 7, ensayos: 1, placajes: 6, foto_url: 'https://ui-avatars.com/api/?name=Hugo+Perez&background=101015&color=fff' },
-  { equipo: 'negro', jugador: 'Iván Torres', posicion: 'Flanker', puntos: 3, ensayos: 0, placajes: 11, foto_url: 'https://ui-avatars.com/api/?name=Ivan+Torres&background=101015&color=fff' },
+  { equipo: 'rojo', jugador: 'Álvaro Ruiz', posicion: 'Ala', placajes: 6, placajes_fallados: 2, metros: 72, tiempo_juego: 78, ensayos: 2, patadas: 1, foto_url: 'https://ui-avatars.com/api/?name=Alvaro+Ruiz&background=cf102d&color=fff' },
+  { equipo: 'rojo', jugador: 'Sergio Díaz', posicion: 'Centro', placajes: 4, placajes_fallados: 1, metros: 55, tiempo_juego: 76, ensayos: 1, patadas: 0, foto_url: 'https://ui-avatars.com/api/?name=Sergio+Diaz&background=cf102d&color=fff' },
+  { equipo: 'rojo', jugador: 'Pablo León', posicion: 'Tercera línea', placajes: 10, placajes_fallados: 3, metros: 32, tiempo_juego: 80, ensayos: 0, patadas: 0, foto_url: 'https://ui-avatars.com/api/?name=Pablo+Leon&background=cf102d&color=fff' },
+  { equipo: 'negro', jugador: 'Mario Nieto', posicion: 'Apertura', placajes: 5, placajes_fallados: 1, metros: 64, tiempo_juego: 79, ensayos: 1, patadas: 5, foto_url: 'https://ui-avatars.com/api/?name=Mario+Nieto&background=101015&color=fff' },
+  { equipo: 'negro', jugador: 'Hugo Pérez', posicion: 'Centro', placajes: 6, placajes_fallados: 2, metros: 51, tiempo_juego: 75, ensayos: 1, patadas: 0, foto_url: 'https://ui-avatars.com/api/?name=Hugo+Perez&background=101015&color=fff' },
+  { equipo: 'negro', jugador: 'Iván Torres', posicion: 'Flanker', placajes: 11, placajes_fallados: 4, metros: 29, tiempo_juego: 80, ensayos: 0, patadas: 0, foto_url: 'https://ui-avatars.com/api/?name=Ivan+Torres&background=101015&color=fff' },
 ];
 
 function normalizeTeam(v) {
@@ -54,11 +55,19 @@ function normalizeTeam(v) {
   if (t.includes('negro')) return 'negro';
   return null;
 }
+
 const normalizeHeader = (h) => String(h || '').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 const toNumber = (v) => {
   const n = Number(String(v || '').replace(',', '.'));
   return Number.isFinite(n) ? n : 0;
 };
+
+function rowValue(row, keys) {
+  for (const key of keys) {
+    if (row[key] !== undefined && row[key] !== '') return row[key];
+  }
+  return '';
+}
 
 function parseCsv(text) {
   const lines = text.split(/\r?\n/).filter((l) => l.trim());
@@ -76,7 +85,11 @@ function ensurePlayer(team, row) {
   const name = row.jugador || 'Jugador sin nombre';
   if (!state.teamData[team][name]) {
     state.teamData[team][name] = {
-      posicion: row.posicion || 'Sin posición', foto: row.foto_url || '', matches: 0, puntos: 0, ensayos: 0, placajes: 0, history: [],
+      posicion: row.posicion || 'Sin posición',
+      foto: row.foto_url || '',
+      matches: 0,
+      totals: { placajes: 0, placajes_fallados: 0, metros: 0, tiempo_juego: 0, ensayos: 0, patadas: 0 },
+      history: [],
     };
   }
   return state.teamData[team][name];
@@ -87,24 +100,36 @@ function ingestRows(rows, matchName) {
   rows.forEach((row) => {
     const team = normalizeTeam(row.equipo);
     if (!team) return;
-    const player = ensurePlayer(team, row);
-    const puntos = toNumber(row.puntos);
-    const ensayos = toNumber(row.ensayos);
-    const placajes = toNumber(row.placajes);
-    player.posicion = row.posicion || player.posicion;
-    player.foto = row.foto_url || player.foto;
+
+    const normalized = {
+      jugador: rowValue(row, ['jugador']),
+      posicion: rowValue(row, ['posicion']),
+      foto_url: rowValue(row, ['foto_url', 'foto url', 'foto']),
+      placajes: toNumber(rowValue(row, ['placajes'])),
+      placajes_fallados: toNumber(rowValue(row, ['placajes_fallados', 'placajes fallados'])),
+      metros: toNumber(rowValue(row, ['metros'])),
+      tiempo_juego: toNumber(rowValue(row, ['tiempo_juego', 'tiempo de juego'])),
+      ensayos: toNumber(rowValue(row, ['ensayos'])),
+      patadas: toNumber(rowValue(row, ['patadas'])),
+    };
+
+    const player = ensurePlayer(team, normalized);
+    player.posicion = normalized.posicion || player.posicion;
+    player.foto = normalized.foto_url || player.foto;
     player.matches += 1;
-    player.puntos += puntos;
-    player.ensayos += ensayos;
-    player.placajes += placajes;
-    player.history.push({ matchName, puntos, ensayos, placajes });
+
+    METRICS.forEach((metric) => {
+      player.totals[metric] += normalized[metric];
+    });
+
+    player.history.push({ matchName, ...normalized });
   });
 }
 
 function topPlayer(team, metric) {
   const entries = Object.entries(state.teamData[team]);
   if (!entries.length) return null;
-  return entries.sort((a, b) => b[1][metric] - a[1][metric])[0];
+  return entries.sort((a, b) => b[1].totals[metric] - a[1].totals[metric])[0];
 }
 
 function playerPhoto(name, p) {
@@ -115,23 +140,25 @@ function renderTeamSummary(team) {
   const summary = document.getElementById(`${team}-resumen-stats`);
   const teamStats = document.getElementById(`${team}-team-stats`);
   if (!summary || !teamStats) return;
-  const topPoints = topPlayer(team, 'puntos');
-  const topTry = topPlayer(team, 'ensayos');
+
   const topTackle = topPlayer(team, 'placajes');
-  if (topPoints && topTry && topTackle) {
+  const topTries = topPlayer(team, 'ensayos');
+  const topMeters = topPlayer(team, 'metros');
+  if (topTackle && topTries && topMeters) {
     summary.innerHTML = `
-      <li><span>Máximo anotador</span><strong>${topPoints[0]} (${topPoints[1].puntos} pts)</strong></li>
-      <li><span>Más ensayos</span><strong>${topTry[0]} (${topTry[1].ensayos})</strong></li>
-      <li><span>Más placajes</span><strong>${topTackle[0]} (${topTackle[1].placajes})</strong></li>`;
+      <li><span>Más placajes</span><strong>${topTackle[0]} (${topTackle[1].totals.placajes})</strong></li>
+      <li><span>Más ensayos</span><strong>${topTries[0]} (${topTries[1].totals.ensayos})</strong></li>
+      <li><span>Más metros</span><strong>${topMeters[0]} (${topMeters[1].totals.metros} m)</strong></li>`;
   }
+
   const players = Object.values(state.teamData[team]);
-  const pointsFor = players.reduce((a, p) => a + p.puntos, 0);
-  const tries = players.reduce((a, p) => a + p.ensayos, 0);
-  const tackles = players.reduce((a, p) => a + p.placajes, 0);
+  const totalEns = players.reduce((a, p) => a + p.totals.ensayos, 0);
+  const totalPlac = players.reduce((a, p) => a + p.totals.placajes, 0);
+  const totalM = players.reduce((a, p) => a + p.totals.metros, 0);
   teamStats.innerHTML = `
     <li><span>Partidos cargados</span><strong>${state.matches.length}</strong></li>
-    <li><span>Puntos totales</span><strong>${pointsFor}</strong></li>
-    <li><span>Ensayos / Placajes</span><strong>${tries} / ${tackles}</strong></li>`;
+    <li><span>Ensayos / Placajes</span><strong>${totalEns} / ${totalPlac}</strong></li>
+    <li><span>Metros totales</span><strong>${totalM}</strong></li>`;
 }
 
 function renderSquad(team) {
@@ -146,11 +173,11 @@ function renderSquad(team) {
 function renderPlayerCards(team) {
   const container = document.getElementById(`${team}-player-grid`);
   if (!container) return;
-  const players = Object.entries(state.teamData[team]).sort((a, b) => b[1].puntos - a[1].puntos);
+  const players = Object.entries(state.teamData[team]).sort((a, b) => b[1].totals.placajes - a[1].totals.placajes);
   container.innerHTML = players
     .map(([name, p], idx) => {
       const perMatch = p.history
-        .map((m) => `<li><span>${m.matchName}</span><strong>${m.puntos} pts · ${m.ensayos} ens · ${m.placajes} pla</strong></li>`)
+        .map((m) => `<li><span>${m.matchName}</span><strong>${m.placajes} pla · ${m.metros} m · ${m.ensayos} ens · ${m.patadas} pat</strong></li>`)
         .join('');
       return `
         <details class="player-card" ${idx === 0 ? 'open' : ''}>
@@ -162,9 +189,12 @@ function renderPlayerCards(team) {
           <ul class="player-stats">
             <li><span>Posición</span><strong>${p.posicion}</strong></li>
             <li><span>Partidos</span><strong>${p.matches}</strong></li>
-            <li><span>Puntos</span><strong>${p.puntos}</strong></li>
-            <li><span>Ensayos</span><strong>${p.ensayos}</strong></li>
-            <li><span>Placajes</span><strong>${p.placajes}</strong></li>
+            <li><span>Placajes</span><strong>${p.totals.placajes}</strong></li>
+            <li><span>Placajes fallados</span><strong>${p.totals.placajes_fallados}</strong></li>
+            <li><span>Metros</span><strong>${p.totals.metros}</strong></li>
+            <li><span>Tiempo de juego</span><strong>${p.totals.tiempo_juego}</strong></li>
+            <li><span>Ensayos</span><strong>${p.totals.ensayos}</strong></li>
+            <li><span>Patadas</span><strong>${p.totals.patadas}</strong></li>
           </ul>
           <p class="player-history-title">Detalle por partido</p>
           <ul class="player-stats">${perMatch}</ul>
@@ -176,24 +206,26 @@ function renderPlayerCards(team) {
 function buildAnalyticsData(team) {
   const players = Object.values(state.teamData[team]);
   if (!players.length || !state.matches.length) return null;
+
   const perMatch = state.matches.map((matchName) => {
-    let puntos = 0;
-    let ensayos = 0;
-    let placajes = 0;
+    const totals = { placajes: 0, placajes_fallados: 0, metros: 0, tiempo_juego: 0, ensayos: 0, patadas: 0 };
     players.forEach((p) => {
       const m = p.history.find((x) => x.matchName === matchName);
-      if (m) {
-        puntos += m.puntos;
-        ensayos += m.ensayos;
-        placajes += m.placajes;
-      }
+      if (!m) return;
+      METRICS.forEach((metric) => {
+        totals[metric] += m[metric] || 0;
+      });
     });
-    return { puntos, ensayos, placajes };
+    return totals;
   });
+
   return {
-    'Puntos a favor': perMatch.map((m) => m.puntos),
-    Ensayos: perMatch.map((m) => m.ensayos),
     Placajes: perMatch.map((m) => m.placajes),
+    'Placajes fallados': perMatch.map((m) => m.placajes_fallados),
+    Metros: perMatch.map((m) => m.metros),
+    'Tiempo juego': perMatch.map((m) => m.tiempo_juego),
+    Ensayos: perMatch.map((m) => m.ensayos),
+    Patadas: perMatch.map((m) => m.patadas),
   };
 }
 
@@ -216,8 +248,11 @@ function renderAnalytics() {
             return `${x},${y}`;
           })
           .join(' ');
+        const avgY = 100 - (avg / max) * 100;
 
-        return `<article class="analytics-card"><div class="analytics-top"><strong>${name}</strong><span>Media: ${avg.toFixed(1)}</span></div><div class="line-chart"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><polyline class="line-path" points="${points}"></polyline></svg></div><div class="journey-labels">${labels}</div></article>`;
+        return `<article class="analytics-card"><div class="analytics-top"><strong>${name}</strong><span>Media: ${avg.toFixed(
+          1,
+        )}</span></div><div class="line-chart"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><line class="avg-line" x1="0" y1="${avgY}" x2="100" y2="${avgY}"></line><polyline class="line-path" points="${points}"></polyline></svg></div><div class="journey-labels">${labels}</div></article>`;
       })
       .join('');
   });
@@ -257,10 +292,9 @@ async function loadCsvFromUrls(urls) {
     if (!url) continue;
     const response = await fetch(url);
     if (!response.ok) continue;
-    const text = await response.text();
-    const rows = parseCsv(text);
-    const name = url.split('/').pop() || `partido-${state.matches.length + 1}`;
-    ingestRows(rows, name.replace('.csv', ''));
+    const rows = parseCsv(await response.text());
+    const name = (url.split('/').pop() || `partido-${state.matches.length + 1}`).replace('.csv', '');
+    ingestRows(rows, name);
     names.push(name);
   }
   if (status) status.textContent = `CSV GitHub cargados: ${names.join(', ') || 'ninguno'}`;
@@ -269,7 +303,6 @@ async function loadCsvFromUrls(urls) {
 
 function bootstrap() {
   document.querySelectorAll('[data-tab-group]').forEach((group) => setupTabGroup(group));
-
   ingestRows(seedRows, 'partido-demo');
   renderFromState();
 
