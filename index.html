@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vallecas Rugby Union</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header class="hero">
+        <div class="hero-top">
+          <div class="hero-copy">
+            <p class="kicker">Club oficial</p>
+            <h1>Vallecas Rugby Union</h1>
+            <p class="subtitle">Resultados y estadísticas del club en un solo lugar.</p>
+          </div>
+        </div>
+      </header>
+
+      <nav class="tabs" aria-label="Secciones principales" role="tablist" data-tab-group>
+        <button id="tab-resultados" class="tab active" role="tab" aria-selected="true" aria-controls="resultados">
+          Resultados
+        </button>
+        <button id="tab-estadisticas" class="tab" role="tab" aria-selected="false" aria-controls="estadisticas">
+          Estadísticas
+        </button>
+      </nav>
+
+      <section id="resultados" class="panel tab-panel active" role="tabpanel" aria-labelledby="tab-resultados">
+        <h2>Resultados</h2>
+        <div class="team-results">
+          <details class="team-card" open>
+            <summary>
+              <span class="team-name">Equipo Rojo</span>
+              <span class="team-meta">Último resultado: 24 - 18</span>
+            </summary>
+            <div class="team-content">
+              <p class="team-intro">Resultados de todas las jornadas (temporada actual):</p>
+              <ul class="journey-list">
+                <li><span>Jornada 1</span><strong>Vallecas Rojo 18 - 12 Club Norte</strong></li>
+                <li><span>Jornada 2</span><strong>Rugby Este 21 - 17 Vallecas Rojo</strong></li>
+                <li><span>Jornada 3</span><strong>Vallecas Rojo 26 - 14 Titanes RC</strong></li>
+                <li><span>Jornada 4</span><strong>Olivos RC 10 - 20 Vallecas Rojo</strong></li>
+                <li><span>Jornada 5</span><strong>Vallecas Rojo 24 - 18 Club Norte</strong></li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="team-card">
+            <summary>
+              <span class="team-name">Equipo Negro</span>
+              <span class="team-meta">Último resultado: 19 - 21</span>
+            </summary>
+            <div class="team-content">
+              <p class="team-intro">Resultados de todas las jornadas (temporada actual):</p>
+              <ul class="journey-list">
+                <li><span>Jornada 1</span><strong>Vallecas Negro 15 - 13 Rugby Sur</strong></li>
+                <li><span>Jornada 2</span><strong>Lobos RC 22 - 16 Vallecas Negro</strong></li>
+                <li><span>Jornada 3</span><strong>Vallecas Negro 19 - 19 Unión Oeste</strong></li>
+                <li><span>Jornada 4</span><strong>Trébol RC 17 - 23 Vallecas Negro</strong></li>
+                <li><span>Jornada 5</span><strong>Vallecas Negro 19 - 21 Rugby Sur</strong></li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="estadisticas" class="panel tab-panel" role="tabpanel" aria-labelledby="tab-estadisticas" hidden>
+        <h2>Estadísticas</h2>
+
+        <nav class="subtabs" aria-label="Equipos estadísticas" role="tablist" data-tab-group>
+          <button id="tab-stats-rojo" class="subtab active" role="tab" aria-selected="true" aria-controls="stats-rojo">
+            Rojo
+          </button>
+          <button id="tab-stats-negro" class="subtab" role="tab" aria-selected="false" aria-controls="stats-negro">
+            Negro
+          </button>
+        </nav>
+
+        <section id="stats-rojo" class="subpanel tab-panel active" role="tabpanel" aria-labelledby="tab-stats-rojo">
+          <nav class="microtabs" aria-label="Estadísticas equipo rojo" role="tablist" data-tab-group>
+            <button
+              id="tab-rojo-jugadores"
+              class="microtab active"
+              role="tab"
+              aria-selected="true"
+              aria-controls="rojo-jugadores"
+            >
+              Jugadores
+            </button>
+            <button id="tab-rojo-equipo" class="microtab" role="tab" aria-selected="false" aria-controls="rojo-equipo">
+              Equipo
+            </button>
+          </nav>
+
+          <div id="rojo-jugadores" class="micro-panel tab-panel active" role="tabpanel" aria-labelledby="tab-rojo-jugadores">
+            <nav class="playertabs" aria-label="Jugadores equipo rojo" role="tablist" data-tab-group>
+              <button
+                id="tab-rojo-jugadores-resumen"
+                class="playertab active"
+                role="tab"
+                aria-selected="true"
+                aria-controls="rojo-jugadores-resumen"
+              >
+                Resumen
+              </button>
+              <button
+                id="tab-rojo-estadisticas-jugadores"
+                class="playertab"
+                role="tab"
+                aria-selected="false"
+                aria-controls="rojo-estadisticas-jugadores"
+              >
+                Estadísticas jugadores
+              </button>
+            </nav>
+
+            <div id="rojo-jugadores-resumen" class="tab-panel active" role="tabpanel" aria-labelledby="tab-rojo-jugadores-resumen">
+              <ul class="stats-list">
+                <li><span>Máximo anotador</span><strong>Álvaro Ruiz (58 pts)</strong></li>
+                <li><span>Más ensayos</span><strong>Sergio Díaz (9)</strong></li>
+                <li><span>Más placajes</span><strong>Pablo León (47)</strong></li>
+              </ul>
+            </div>
+
+            <div
+              id="rojo-estadisticas-jugadores"
+              class="tab-panel"
+              role="tabpanel"
+              aria-labelledby="tab-rojo-estadisticas-jugadores"
+              hidden
+            >
+              <div class="player-grid">
+                <details class="player-card" open>
+                  <summary>Álvaro Ruiz</summary>
+                  <ul class="player-stats">
+                    <li><span>Posición</span><strong>Ala</strong></li>
+                    <li><span>Partidos</span><strong>5</strong></li>
+                    <li><span>Puntos</span><strong>58</strong></li>
+                    <li><span>Ensayos</span><strong>6</strong></li>
+                    <li><span>Placajes</span><strong>29</strong></li>
+                  </ul>
+                </details>
+                <details class="player-card">
+                  <summary>Sergio Díaz</summary>
+                  <ul class="player-stats">
+                    <li><span>Posición</span><strong>Centro</strong></li>
+                    <li><span>Partidos</span><strong>5</strong></li>
+                    <li><span>Puntos</span><strong>42</strong></li>
+                    <li><span>Ensayos</span><strong>9</strong></li>
+                    <li><span>Placajes</span><strong>21</strong></li>
+                  </ul>
+                </details>
+                <details class="player-card">
+                  <summary>Pablo León</summary>
+                  <ul class="player-stats">
+                    <li><span>Posición</span><strong>Tercera línea</strong></li>
+                    <li><span>Partidos</span><strong>5</strong></li>
+                    <li><span>Puntos</span><strong>14</strong></li>
+                    <li><span>Ensayos</span><strong>2</strong></li>
+                    <li><span>Placajes</span><strong>47</strong></li>
+                  </ul>
+                </details>
+              </div>
+            </div>
+          </div>
+
+          <div id="rojo-equipo" class="micro-panel tab-panel" role="tabpanel" aria-labelledby="tab-rojo-equipo" hidden>
+            <ul class="stats-list">
+              <li><span>Victorias</span><strong>4</strong></li>
+              <li><span>Derrotas</span><strong>1</strong></li>
+              <li><span>Puntos a favor / contra</span><strong>105 / 75</strong></li>
+            </ul>
+            <section class="match-analytics" data-team="rojo">
+              <h3>Gráficos por partido</h3>
+              <p class="analytics-hint">Comparativa por jornada con media automática.</p>
+              <div class="analytics-grid"></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="stats-negro" class="subpanel tab-panel" role="tabpanel" aria-labelledby="tab-stats-negro" hidden>
+          <nav class="microtabs" aria-label="Estadísticas equipo negro" role="tablist" data-tab-group>
+            <button
+              id="tab-negro-jugadores"
+              class="microtab active"
+              role="tab"
+              aria-selected="true"
+              aria-controls="negro-jugadores"
+            >
+              Jugadores
+            </button>
+            <button
+              id="tab-negro-equipo"
+              class="microtab"
+              role="tab"
+              aria-selected="false"
+              aria-controls="negro-equipo"
+            >
+              Equipo
+            </button>
+          </nav>
+
+          <div id="negro-jugadores" class="micro-panel tab-panel active" role="tabpanel" aria-labelledby="tab-negro-jugadores">
+            <nav class="playertabs" aria-label="Jugadores equipo negro" role="tablist" data-tab-group>
+              <button
+                id="tab-negro-jugadores-resumen"
+                class="playertab active"
+                role="tab"
+                aria-selected="true"
+                aria-controls="negro-jugadores-resumen"
+              >
+                Resumen
+              </button>
+              <button
+                id="tab-negro-estadisticas-jugadores"
+                class="playertab"
+                role="tab"
+                aria-selected="false"
+                aria-controls="negro-estadisticas-jugadores"
+              >
+                Estadísticas jugadores
+              </button>
+            </nav>
+
+            <div id="negro-jugadores-resumen" class="tab-panel active" role="tabpanel" aria-labelledby="tab-negro-jugadores-resumen">
+              <ul class="stats-list">
+                <li><span>Máximo anotador</span><strong>Mario Nieto (51 pts)</strong></li>
+                <li><span>Más ensayos</span><strong>Hugo Pérez (7)</strong></li>
+                <li><span>Más placajes</span><strong>Iván Torres (44)</strong></li>
+              </ul>
+            </div>
+
+            <div
+              id="negro-estadisticas-jugadores"
+              class="tab-panel"
+              role="tabpanel"
+              aria-labelledby="tab-negro-estadisticas-jugadores"
+              hidden
+            >
+              <div class="player-grid">
+                <details class="player-card" open>
+                  <summary>Mario Nieto</summary>
+                  <ul class="player-stats">
+                    <li><span>Posición</span><strong>Apertura</strong></li>
+                    <li><span>Partidos</span><strong>5</strong></li>
+                    <li><span>Puntos</span><strong>51</strong></li>
+                    <li><span>Ensayos</span><strong>5</strong></li>
+                    <li><span>Placajes</span><strong>18</strong></li>
+                  </ul>
+                </details>
+                <details class="player-card">
+                  <summary>Hugo Pérez</summary>
+                  <ul class="player-stats">
+                    <li><span>Posición</span><strong>Centro</strong></li>
+                    <li><span>Partidos</span><strong>5</strong></li>
+                    <li><span>Puntos</span><strong>39</strong></li>
+                    <li><span>Ensayos</span><strong>7</strong></li>
+                    <li><span>Placajes</span><strong>24</strong></li>
+                  </ul>
+                </details>
+                <details class="player-card">
+                  <summary>Iván Torres</summary>
+                  <ul class="player-stats">
+                    <li><span>Posición</span><strong>Flanker</strong></li>
+                    <li><span>Partidos</span><strong>5</strong></li>
+                    <li><span>Puntos</span><strong>11</strong></li>
+                    <li><span>Ensayos</span><strong>1</strong></li>
+                    <li><span>Placajes</span><strong>44</strong></li>
+                  </ul>
+                </details>
+              </div>
+            </div>
+          </div>
+
+          <div id="negro-equipo" class="micro-panel tab-panel" role="tabpanel" aria-labelledby="tab-negro-equipo" hidden>
+            <ul class="stats-list">
+              <li><span>Victorias</span><strong>2</strong></li>
+              <li><span>Empates</span><strong>1</strong></li>
+              <li><span>Puntos a favor / contra</span><strong>92 / 94</strong></li>
+            </ul>
+            <section class="match-analytics" data-team="negro">
+              <h3>Gráficos por partido</h3>
+              <p class="analytics-hint">Comparativa por jornada con media automática.</p>
+              <div class="analytics-grid"></div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
