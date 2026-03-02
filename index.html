@@ -69,6 +69,20 @@
       <section id="estadisticas" class="panel tab-panel" role="tabpanel" aria-labelledby="tab-estadisticas" hidden>
         <h2>Estadísticas</h2>
 
+        <section class="csv-loader">
+          <h3>Cargar CSV por partido</h3>
+          <p>
+            Sube uno o varios archivos CSV (1 archivo = 1 partido). El sistema acumula automáticamente la información
+            por jugador y equipo.
+          </p>
+          <label class="csv-button" for="csv-input">Seleccionar CSV</label>
+          <input id="csv-input" type="file" accept=".csv,text/csv" multiple />
+          <p class="csv-status" id="csv-status">Sin archivos cargados.</p>
+          <p class="csv-format">
+            Columnas esperadas: <code>equipo,jugador,posicion,puntos,ensayos,placajes</code>
+          </p>
+        </section>
+
         <nav class="subtabs" aria-label="Equipos estadísticas" role="tablist" data-tab-group>
           <button id="tab-stats-rojo" class="subtab active" role="tab" aria-selected="true" aria-controls="stats-rojo">
             Rojo
@@ -117,7 +131,7 @@
             </nav>
 
             <div id="rojo-jugadores-resumen" class="tab-panel active" role="tabpanel" aria-labelledby="tab-rojo-jugadores-resumen">
-              <ul class="stats-list">
+              <ul class="stats-list" id="rojo-resumen-stats">
                 <li><span>Máximo anotador</span><strong>Álvaro Ruiz (58 pts)</strong></li>
                 <li><span>Más ensayos</span><strong>Sergio Díaz (9)</strong></li>
                 <li><span>Más placajes</span><strong>Pablo León (47)</strong></li>
@@ -131,7 +145,7 @@
               aria-labelledby="tab-rojo-estadisticas-jugadores"
               hidden
             >
-              <div class="player-grid">
+              <div class="player-grid" id="rojo-player-grid">
                 <details class="player-card" open>
                   <summary>Álvaro Ruiz</summary>
                   <ul class="player-stats">
@@ -168,13 +182,13 @@
 
           <div id="rojo-equipo" class="micro-panel tab-panel" role="tabpanel" aria-labelledby="tab-rojo-equipo" hidden>
             <h4>Plantilla equipo rojo</h4>
-            <ul class="squad-list">
+            <ul class="squad-list" id="rojo-squad-list">
               <li>Álvaro Ruiz - Ala</li>
               <li>Sergio Díaz - Centro</li>
               <li>Pablo León - Tercera línea</li>
               <li>Diego Campos - Medio melé</li>
             </ul>
-            <ul class="stats-list">
+            <ul class="stats-list" id="rojo-team-stats">
               <li><span>Victorias</span><strong>4</strong></li>
               <li><span>Derrotas</span><strong>1</strong></li>
               <li><span>Puntos a favor / contra</span><strong>105 / 75</strong></li>
@@ -232,7 +246,7 @@
             </nav>
 
             <div id="negro-jugadores-resumen" class="tab-panel active" role="tabpanel" aria-labelledby="tab-negro-jugadores-resumen">
-              <ul class="stats-list">
+              <ul class="stats-list" id="negro-resumen-stats">
                 <li><span>Máximo anotador</span><strong>Mario Nieto (51 pts)</strong></li>
                 <li><span>Más ensayos</span><strong>Hugo Pérez (7)</strong></li>
                 <li><span>Más placajes</span><strong>Iván Torres (44)</strong></li>
@@ -246,7 +260,7 @@
               aria-labelledby="tab-negro-estadisticas-jugadores"
               hidden
             >
-              <div class="player-grid">
+              <div class="player-grid" id="negro-player-grid">
                 <details class="player-card" open>
                   <summary>Mario Nieto</summary>
                   <ul class="player-stats">
@@ -283,13 +297,13 @@
 
           <div id="negro-equipo" class="micro-panel tab-panel" role="tabpanel" aria-labelledby="tab-negro-equipo" hidden>
             <h4>Plantilla equipo negro</h4>
-            <ul class="squad-list">
+            <ul class="squad-list" id="negro-squad-list">
               <li>Mario Nieto - Apertura</li>
               <li>Hugo Pérez - Centro</li>
               <li>Iván Torres - Flanker</li>
               <li>Rubén Moya - Pilar</li>
             </ul>
-            <ul class="stats-list">
+            <ul class="stats-list" id="negro-team-stats">
               <li><span>Victorias</span><strong>2</strong></li>
               <li><span>Empates</span><strong>1</strong></li>
               <li><span>Puntos a favor / contra</span><strong>92 / 94</strong></li>
